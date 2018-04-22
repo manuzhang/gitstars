@@ -38,6 +38,8 @@ export const loadReposAndLanguageTags = async (page = 1) => {
     }
   })
 
+  languageTags.sort((a, b) => b.repos.length - a.repos.length)
+
   return { repos, languageTags }
 }
 
