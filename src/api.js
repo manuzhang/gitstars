@@ -90,3 +90,12 @@ export const saveGitstarsGist = (content) => {
     },
   })
 }
+
+// https://developer.github.com/v3/repos/#list-all-topics-for-a-repository
+export const getRepoTopics = (owner, repo) => {
+  return axios.get(`/repos/${owner}/${repo}/topics`, {
+    headers: {
+      'Accept': 'application/vnd.github.mercy-preview+json',
+    },
+  })
+}

@@ -5,7 +5,7 @@ import tag from './tag'
 import repo from './repo'
 import i18n from '@/i18n'
 import appConfig from '@/config'
-import { saveGitstarsGist } from '@/api'
+import { getRepoTopics, saveGitstarsGist } from '@/api'
 import { loadReposAndLanguageTags, loadGitstarsData, formatReposTag, notifySuccess, notifyWarn, notifyError } from '@/helper'
 
 if (process.env.NODE_ENV !== 'production') Vue.use(Vuex)
@@ -37,6 +37,15 @@ export default new Vuex.Store({
         .then(([{ repos, languageTags }, content]) => {
           const { tags } = content
           formatReposTag(repos, tags)
+          repos.forEach((repo) => {
+            getRepoTopics(repo.owner.login, repo.name).then(function (topics) {
+              const tagIndex = 0
+              topics.names.forEach((name) => {
+                const tag = {'name': name}
+                commit('repo/insertRepoTag', {repo, tag, tagIndex})
+              })
+            })
+          })
 
           commit('repo/initRepos', repos)
           commit('tag/initTags', tags)
